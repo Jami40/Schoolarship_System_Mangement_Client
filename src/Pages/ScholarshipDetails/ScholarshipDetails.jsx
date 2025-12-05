@@ -13,6 +13,7 @@ export default function ScholarshipDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+  const [reviews, setReviews] = useState([]);
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [applicationData, setApplicationData] = useState({
     phone: '',
@@ -22,55 +23,6 @@ export default function ScholarshipDetails() {
     sscResult: '',
     hscResult: ''
   });
-
-  // Dummy reviews data
-  const dummyReviews = [
-    {
-      id: 1,
-      reviewer_image: 'https://randomuser.me/api/portraits/women/1.jpg',
-      reviewer_name: 'Sarah Johnson',
-      review_date: '2025-11-15',
-      rating: 5,
-      comment:
-        'This scholarship completely changed my life! The application process was straightforward, and the support from the university was exceptional. Highly recommend to anyone looking for quality education opportunities.',
-    },
-    {
-      id: 2,
-      reviewer_image: 'https://randomuser.me/api/portraits/men/2.jpg',
-      reviewer_name: 'Michael Chen',
-      review_date: '2025-10-28',
-      rating: 4,
-      comment:
-        'Great scholarship program with comprehensive coverage. The only downside was the lengthy documentation process, but the end result was totally worth it. The stipend is generous and covers living expenses well.',
-    },
-    {
-      id: 3,
-      reviewer_image: 'https://randomuser.me/api/portraits/women/3.jpg',
-      reviewer_name: 'Priya Sharma',
-      review_date: '2025-10-10',
-      rating: 5,
-      comment:
-        'I am incredibly grateful for this opportunity. The scholarship not only covered my tuition but also provided mentorship and networking opportunities that have been invaluable for my career growth.',
-    },
-    {
-      id: 4,
-      reviewer_image: 'https://randomuser.me/api/portraits/men/4.jpg',
-      reviewer_name: 'David Martinez',
-      review_date: '2025-09-22',
-      rating: 4,
-      comment:
-        'Excellent program with good support system. The university staff was very helpful throughout the application process. Would definitely recommend to prospective international students.',
-    },
-    {
-      id: 5,
-      reviewer_image: 'https://randomuser.me/api/portraits/women/5.jpg',
-      reviewer_name: 'Emma Wilson',
-      review_date: '2025-09-05',
-      rating: 5,
-      comment:
-        'Outstanding scholarship opportunity! The financial support allowed me to focus entirely on my studies without worrying about expenses. The academic environment is world-class.',
-    },
-  ];
 
   useEffect(() => {
     const fetchScholarshipDetails = async () => {
@@ -93,7 +45,24 @@ export default function ScholarshipDetails() {
       }
     };
 
+    const fetchReviews = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/reviews`);
+        if (response.ok) {
+          const allReviews = await response.json();
+          // Filter reviews for this scholarship
+          const scholarshipReviews = allReviews.filter(
+            review => review.scholarship_id === id
+          );
+          setReviews(scholarshipReviews);
+        }
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
+    };
+
     fetchScholarshipDetails();
+    fetchReviews();
   }, [id]);
 
   // Format date
@@ -107,12 +76,12 @@ export default function ScholarshipDetails() {
 
   // Carousel navigation
   const nextReview = () => {
-    setCurrentReviewIndex((prev) => (prev + 1) % dummyReviews.length);
+    setCurrentReviewIndex((prev) => (prev + 1) % (reviews.length || 1));
   };
 
   const prevReview = () => {
     setCurrentReviewIndex((prev) =>
-      prev === 0 ? dummyReviews.length - 1 : prev - 1
+      prev === 0 ? (reviews.length - 1 || 0) : prev - 1
     );
   };
 
@@ -463,30 +432,45 @@ export default function ScholarshipDetails() {
               </h2>
               <div className="text-right">
                 <p className="text-sm text-gray-600">Average Rating</p>
-                <p className="text-2xl font-bold text-yellow-500">4.6 / 5.0</p>
+                <p className="text-2xl font-bold text-yellow-500">
+                  {reviews.length > 0 
+                    ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
+                    : 'N/A'} {reviews.length > 0 && '/ 5.0'}
+                </p>
+                <p className="text-xs text-gray-500">{reviews.length} review{reviews.length !== 1 ? 's' : ''}</p>
               </div>
             </div>
 
             {/* Carousel */}
             <div className="relative">
-              {/* Review Cards Container */}
-              <div className="overflow-hidden">
-                <div
-                  className="flex transition-transform duration-500 ease-in-out"
-                  style={{
-                    transform: `translateX(-${currentReviewIndex * 100}%)`,
-                  }}
-                >
-                  {dummyReviews.map((review) => (
-                    <div
-                      key={review.id}
-                      className="w-full flex-shrink-0 px-2"
-                    >
-                      <ReviewCard review={review} />
-                    </div>
-                  ))}
+              {reviews.length === 0 ? (
+                <div className="text-center py-12">
+                  <svg className="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                  </svg>
+                  <p className="text-gray-600">No reviews yet for this scholarship.</p>
+                  <p className="text-sm text-gray-500 mt-2">Be the first to share your experience!</p>
                 </div>
-              </div>
+              ) : (
+                <>
+                  {/* Review Cards Container */}
+                  <div className="overflow-hidden">
+                    <div
+                      className="flex transition-transform duration-500 ease-in-out"
+                      style={{
+                        transform: `translateX(-${currentReviewIndex * 100}%)`,
+                      }}
+                    >
+                      {reviews.map((review) => (
+                        <div
+                          key={review._id}
+                          className="w-full shrink-0 px-2"
+                        >
+                          <ReviewCard review={review} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
 
               {/* Navigation Buttons */}
               <button
@@ -530,20 +514,24 @@ export default function ScholarshipDetails() {
               </button>
 
               {/* Dots Indicator */}
-              <div className="flex justify-center mt-6 gap-2">
-                {dummyReviews.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentReviewIndex(index)}
-                    className={`w-3 h-3 rounded-full transition-all ${
-                      index === currentReviewIndex
-                        ? 'bg-blue-600 w-8'
-                        : 'bg-gray-300 hover:bg-gray-400'
-                    }`}
-                    aria-label={`Go to review ${index + 1}`}
-                  />
-                ))}
-              </div>
+              {reviews.length > 1 && (
+                <div className="flex justify-center mt-6 gap-2">
+                  {reviews.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentReviewIndex(index)}
+                      className={`w-3 h-3 rounded-full transition-all ${
+                        index === currentReviewIndex
+                          ? 'bg-blue-600 w-8'
+                          : 'bg-gray-300 hover:bg-gray-400'
+                      }`}
+                      aria-label={`Go to review ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
+                </>
+              )}
             </div>
           </div>
         </div>
