@@ -5,25 +5,66 @@ import ScholarshipCard from '../../components/ScholarshipCard';
 export default function Schoolarship() {
   const { scholarships, loading, error } = useScholarships();
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('default');
+  const [sortOrder, setSortOrder] = useState('asc');
 
-  // Filter scholarships based on search query
+  // Filter and sort scholarships
   const filteredScholarships = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return scholarships;
+    let result = scholarships;
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter((scholarship) => {
+        return (
+          scholarship.university_name?.toLowerCase().includes(query) ||
+          scholarship.scholarship_category?.toLowerCase().includes(query) ||
+          scholarship.subject_name?.toLowerCase().includes(query) ||
+          scholarship.location?.country?.toLowerCase().includes(query) ||
+          scholarship.location?.city?.toLowerCase().includes(query) ||
+          scholarship.scholarship_description?.toLowerCase().includes(query)
+        );
+      });
     }
 
-    const query = searchQuery.toLowerCase();
-    return scholarships.filter((scholarship) => {
-      return (
-        scholarship.university_name?.toLowerCase().includes(query) ||
-        scholarship.scholarship_category?.toLowerCase().includes(query) ||
-        scholarship.subject_name?.toLowerCase().includes(query) ||
-        scholarship.location?.country?.toLowerCase().includes(query) ||
-        scholarship.location?.city?.toLowerCase().includes(query) ||
-        scholarship.scholarship_description?.toLowerCase().includes(query)
-      );
-    });
-  }, [scholarships, searchQuery]);
+    // Apply sorting
+    if (sortBy !== 'default') {
+      result = [...result].sort((a, b) => {
+        let aValue, bValue;
+
+        switch (sortBy) {
+          case 'university':
+            aValue = a.university_name?.toLowerCase() || '';
+            bValue = b.university_name?.toLowerCase() || '';
+            break;
+          case 'deadline':
+            aValue = new Date(a.application_deadline);
+            bValue = new Date(b.application_deadline);
+            break;
+          case 'applicationFee':
+            aValue = parseFloat(a.application_fees) || 0;
+            bValue = parseFloat(b.application_fees) || 0;
+            break;
+          case 'serviceCharge':
+            aValue = parseFloat(a.service_charge) || 0;
+            bValue = parseFloat(b.service_charge) || 0;
+            break;
+          case 'subject':
+            aValue = a.subject_name?.toLowerCase() || '';
+            bValue = b.subject_name?.toLowerCase() || '';
+            break;
+          default:
+            return 0;
+        }
+
+        if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+        if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return result;
+  }, [scholarships, searchQuery, sortBy, sortOrder]);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -31,6 +72,14 @@ export default function Schoolarship() {
 
   const clearSearch = () => {
     setSearchQuery('');
+  };
+
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+  };
+
+  const toggleSortOrder = () => {
+    setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
   };
 
   if (loading) {
@@ -126,6 +175,56 @@ export default function Schoolarship() {
               {filteredScholarships.length} result(s) found for "{searchQuery}"
             </p>
           )}
+        </div>
+
+        {/* Sort Controls */}
+        <div className="max-w-3xl mx-auto mb-8">
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+            <div className="flex items-center gap-3">
+              <label htmlFor="sortBy" className="text-gray-700 font-semibold">
+                Sort by:
+              </label>
+              <select
+                id="sortBy"
+                value={sortBy}
+                onChange={handleSortChange}
+                className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 bg-white"
+              >
+                <option value="default">Default</option>
+                <option value="university">University Name</option>
+                <option value="subject">Subject Name</option>
+                <option value="deadline">Application Deadline</option>
+                <option value="applicationFee">Application Fee</option>
+                <option value="serviceCharge">Service Charge</option>
+              </select>
+            </div>
+
+            {sortBy !== 'default' && (
+              <button
+                onClick={toggleSortOrder}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-md hover:shadow-lg"
+              >
+                <span className="font-semibold">
+                  {sortOrder === 'asc' ? 'Ascending' : 'Descending'}
+                </span>
+                <svg
+                  className={`w-5 h-5 transition-transform duration-200 ${
+                    sortOrder === 'desc' ? 'rotate-180' : ''
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 11l5-5m0 0l5 5m-5-5v12"
+                  />
+                </svg>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Results Count */}
