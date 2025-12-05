@@ -58,7 +58,7 @@ export default function CheckoutForm({ applicationData, scholarship, user }) {
   const saveApplication = async (paymentIntentId) => {
     try {
       // Fetch user data to get user_id
-      const userResponse = await fetch(`http://localhost:3000/users/${user.email}`);
+      const userResponse = await fetch(`https://schoolarship-management-system-serv.vercel.app/users/${user.email}`);
       const userData = await userResponse.json();
 
       // Prepare application data
@@ -100,7 +100,7 @@ export default function CheckoutForm({ applicationData, scholarship, user }) {
       };
 
       // Save to database
-      const response = await fetch('http://localhost:3000/applications', {
+      const response = await fetch('https://schoolarship-management-system-serv.vercel.app/applications', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

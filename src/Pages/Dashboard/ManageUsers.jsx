@@ -23,7 +23,7 @@ export default function ManageUsers() {
   }, [roleFilter, users]);
 
   const fetchUsers = () => {
-    fetch('http://localhost:3000/users')
+    fetch('https://schoolarship-management-system-serv.vercel.app/users')
       .then(res => res.json())
       .then(data => {
         setUsers(data);
@@ -48,7 +48,7 @@ export default function ManageUsers() {
       confirmButtonText: 'Yes, change it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/users/role/${email}`, {
+        fetch(`https://schoolarship-management-system-serv.vercel.app/users/role/${email}`, {
           method: 'PATCH',
           headers: {
             'content-type': 'application/json'
@@ -88,7 +88,7 @@ export default function ManageUsers() {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/users/${email}`, {
+        fetch(`https://schoolarship-management-system-serv.vercel.app/users/${email}`, {
           method: 'DELETE'
         })
           .then(res => res.json())

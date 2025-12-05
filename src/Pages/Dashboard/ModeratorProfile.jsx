@@ -15,7 +15,7 @@ export default function ModeratorProfile() {
   useEffect(() => {
     if (user?.email) {
       // Fetch user data
-      fetch(`http://localhost:3000/users/${user.email}`)
+      fetch(`https://schoolarship-management-system-serv.vercel.app/users/${user.email}`)
         .then(res => res.json())
         .then(data => {
           setUserData(data);
@@ -28,9 +28,9 @@ export default function ModeratorProfile() {
 
       // Fetch statistics
       Promise.all([
-        fetch('http://localhost:3000/scholarships').then(r => r.json()),
-        fetch('http://localhost:3000/applications').then(r => r.json()),
-        fetch('http://localhost:3000/reviews').then(r => r.json())
+        fetch('https://schoolarship-management-system-serv.vercel.app/scholarships').then(r => r.json()),
+        fetch('https://schoolarship-management-system-serv.vercel.app/applications').then(r => r.json()),
+        fetch('https://schoolarship-management-system-serv.vercel.app/reviews').then(r => r.json())
       ]).then(([scholarships, applications, reviews]) => {
         setStats({
           totalScholarships: scholarships.length,

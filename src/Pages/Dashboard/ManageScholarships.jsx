@@ -16,7 +16,7 @@ export default function ManageScholarships() {
   }, []);
 
   const fetchScholarships = () => {
-    fetch('http://localhost:3000/scholarships')
+    fetch('https://schoolarship-management-system-serv.vercel.app/scholarships')
       .then(res => res.json())
       .then(data => {
         setScholarships(data);
@@ -55,7 +55,7 @@ export default function ManageScholarships() {
   const handleEditSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`http://localhost:3000/scholarships/${editingScholarship._id}`, {
+    fetch(`https://schoolarship-management-system-serv.vercel.app/scholarships/${editingScholarship._id}`, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json'
@@ -94,7 +94,7 @@ export default function ManageScholarships() {
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/scholarships/${scholarshipId}`, {
+        fetch(`https://schoolarship-management-system-serv.vercel.app/scholarships/${scholarshipId}`, {
           method: 'DELETE'
         })
           .then(res => res.json())

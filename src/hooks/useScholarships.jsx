@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { API_ENDPOINTS } from '../config/api';
 
 export const useScholarships = (limit = null) => {
   const [scholarships, setScholarships] = useState([]);
@@ -10,8 +11,8 @@ export const useScholarships = (limit = null) => {
       try {
         setLoading(true);
         const url = limit 
-          ? `http://localhost:3000/scholarships/top` 
-          : `http://localhost:3000/scholarships`;
+          ? API_ENDPOINTS.topScholarships 
+          : API_ENDPOINTS.scholarships;
         
         const response = await fetch(url);
         

@@ -12,7 +12,7 @@ export default function AllReviews() {
   }, []);
 
   const fetchReviews = () => {
-    fetch('http://localhost:3000/reviews')
+    fetch('https://schoolarship-management-system-serv.vercel.app/reviews')
       .then(res => res.json())
       .then(data => {
         setReviews(data);
@@ -37,7 +37,7 @@ export default function AllReviews() {
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/reviews/${reviewId}`, {
+        fetch(`https://schoolarship-management-system-serv.vercel.app/reviews/${reviewId}`, {
           method: 'DELETE'
         })
           .then(res => res.json())

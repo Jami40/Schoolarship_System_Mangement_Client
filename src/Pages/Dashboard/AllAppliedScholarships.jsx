@@ -16,7 +16,7 @@ export default function AllAppliedScholarships() {
   }, []);
 
   const fetchApplications = () => {
-    fetch('http://localhost:3000/applications')
+    fetch('https://schoolarship-management-system-serv.vercel.app/applications')
       .then(res => res.json())
       .then(data => {
         setApplications(data);
@@ -43,7 +43,7 @@ export default function AllAppliedScholarships() {
   const handleSubmitFeedback = (e) => {
     e.preventDefault();
 
-    fetch(`http://localhost:3000/applications/${selectedApplication._id}`, {
+    fetch(`https://schoolarship-management-system-serv.vercel.app/applications/${selectedApplication._id}`, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json'
@@ -86,7 +86,7 @@ export default function AllAppliedScholarships() {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/applications/${applicationId}`, {
+        fetch(`https://schoolarship-management-system-serv.vercel.app/applications/${applicationId}`, {
           method: 'PATCH',
           headers: {
             'content-type': 'application/json'
@@ -109,7 +109,7 @@ export default function AllAppliedScholarships() {
   };
 
   const handleStatusChange = (applicationId, newStatus) => {
-    fetch(`http://localhost:3000/applications/${applicationId}`, {
+    fetch(`https://schoolarship-management-system-serv.vercel.app/applications/${applicationId}`, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json'

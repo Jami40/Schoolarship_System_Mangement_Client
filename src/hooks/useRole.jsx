@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useContext } from 'react';
 import { AuthContext } from '../Provider/AuthProvider';
+import { API_ENDPOINTS } from '../config/api';
 
 export const useUserRole = () => {
   const { user } = useContext(AuthContext);
@@ -11,7 +12,7 @@ export const useUserRole = () => {
   useEffect(() => {
     if (user?.email && !fetchedRef.current) {
       fetchedRef.current = true;
-      fetch(`http://localhost:3000/users/${user.email}`)
+      fetch(API_ENDPOINTS.userByEmail(user.email))
         .then(res => res.json())
         .then(data => {
           setUserRole(data?.role || 'user');
@@ -41,7 +42,7 @@ export const useAdmin = () => {
   useEffect(() => {
     if (user?.email && !fetchedRef.current) {
       fetchedRef.current = true;
-      fetch(`http://localhost:3000/users/admin/${user.email}`)
+      fetch(API_ENDPOINTS.checkAdmin(user.email))
         .then(res => res.json())
         .then(data => {
           setIsAdmin(data.admin);
@@ -71,7 +72,7 @@ export const useModerator = () => {
   useEffect(() => {
     if (user?.email && !fetchedRef.current) {
       fetchedRef.current = true;
-      fetch(`http://localhost:3000/users/moderator/${user.email}`)
+      fetch(API_ENDPOINTS.checkModerator(user.email))
         .then(res => res.json())
         .then(data => {
           setIsModerator(data.moderator);

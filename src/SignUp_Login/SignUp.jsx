@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../Provider/AuthProvider';
 import { toast } from 'react-toastify';
+import { API_ENDPOINTS } from '../config/api';
 
 export default function SignUp() {
   const { createUser, signInWithGoogle, updateUserProfile } = useContext(AuthContext);
@@ -56,7 +57,7 @@ export default function SignUp() {
               createdAt: new Date().toISOString()
             };
             
-            fetch('http://localhost:3000/users', {
+            fetch(API_ENDPOINTS.users, {
               method: 'POST',
               headers: {
                 'content-type': 'application/json'
@@ -109,7 +110,7 @@ export default function SignUp() {
           createdAt: new Date().toISOString()
         };
         
-        fetch('http://localhost:3000/users', {
+        fetch(API_ENDPOINTS.users, {
           method: 'POST',
           headers: {
             'content-type': 'application/json'

@@ -33,7 +33,7 @@ export default function ApplyScholarship() {
     // Fetch scholarship details
     const fetchScholarship = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/scholarships/${id}`);
+        const response = await fetch(`https://schoolarship-management-system-serv.vercel.app/scholarships/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch scholarship');
         }
@@ -100,7 +100,7 @@ export default function ApplyScholarship() {
 
     try {
       // Fetch user data
-      const userResponse = await fetch(`http://localhost:3000/users/${user.email}`);
+      const userResponse = await fetch(`https://schoolarship-management-system-serv.vercel.app/users/${user.email}`);
       const userData = await userResponse.json();
 
       // Prepare application data
@@ -150,7 +150,7 @@ export default function ApplyScholarship() {
       };
 
       // Save to database
-      const response = await fetch('http://localhost:3000/applications', {
+      const response = await fetch('https://schoolarship-management-system-serv.vercel.app/applications', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

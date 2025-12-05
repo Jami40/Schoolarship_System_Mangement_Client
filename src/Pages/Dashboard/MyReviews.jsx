@@ -21,7 +21,7 @@ export default function MyReviews() {
 
   const fetchReviews = () => {
     if (user?.email) {
-      fetch(`http://localhost:3000/reviews/user/${user.email}`)
+      fetch(`https://schoolarship-management-system-serv.vercel.app/reviews/user/${user.email}`)
         .then(res => res.json())
         .then(data => {
           setReviews(data);
@@ -47,7 +47,7 @@ export default function MyReviews() {
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/reviews/${reviewId}`, {
+        fetch(`https://schoolarship-management-system-serv.vercel.app/reviews/${reviewId}`, {
           method: 'DELETE'
         })
           .then(res => res.json())
@@ -78,7 +78,7 @@ export default function MyReviews() {
   const handleEditSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`http://localhost:3000/reviews/${editingReview._id}`, {
+    fetch(`https://schoolarship-management-system-serv.vercel.app/reviews/${editingReview._id}`, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json'

@@ -11,7 +11,7 @@ export default function MyProfile() {
 
   useEffect(() => {
     if (user?.email) {
-      fetch(`http://localhost:3000/users/${user.email}`)
+      fetch(`https://schoolarship-management-system-serv.vercel.app/users/${user.email}`)
         .then(res => res.json())
         .then(data => {
           setUserData(data);
@@ -28,7 +28,7 @@ export default function MyProfile() {
   const handleRequestModerator = () => {
     setRequestLoading(true);
     
-    fetch(`http://localhost:3000/users/request-moderator/${user.email}`, {
+    fetch(`https://schoolarship-management-system-serv.vercel.app/users/request-moderator/${user.email}`, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json'

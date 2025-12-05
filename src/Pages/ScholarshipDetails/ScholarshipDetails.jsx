@@ -28,7 +28,7 @@ export default function ScholarshipDetails() {
     const fetchScholarshipDetails = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:3000/scholarships/${id}`);
+        const response = await fetch(`https://schoolarship-management-system-serv.vercel.app/scholarships/${id}`);
 
         if (!response.ok) {
           throw new Error('Failed to fetch scholarship details');
@@ -47,7 +47,7 @@ export default function ScholarshipDetails() {
 
     const fetchReviews = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/reviews`);
+        const response = await fetch(`https://schoolarship-management-system-serv.vercel.app/reviews`);
         if (response.ok) {
           const allReviews = await response.json();
           // Filter reviews for this scholarship
@@ -112,7 +112,7 @@ export default function ScholarshipDetails() {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/applications', {
+      const response = await fetch('https://schoolarship-management-system-serv.vercel.app/applications', {
         method: 'POST',
         headers: {
           'content-type': 'application/json'

@@ -23,7 +23,7 @@ export default function MyApplication() {
   const fetchApplications = () => {
     if (user?.email) {
       console.log('Fetching applications for:', user.email);
-      fetch(`http://localhost:3000/applications/user/${user.email}`)
+      fetch(`https://schoolarship-management-system-serv.vercel.app/applications/user/${user.email}`)
         .then(res => res.json())
         .then(data => {
           console.log('Applications fetched:', data);
@@ -50,7 +50,7 @@ export default function MyApplication() {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/applications/${applicationId}`, {
+        fetch(`https://schoolarship-management-system-serv.vercel.app/applications/${applicationId}`, {
           method: 'DELETE'
         })
           .then(res => res.json())
@@ -109,7 +109,7 @@ export default function MyApplication() {
       review_date: reviewData.reviewDate
     };
 
-    fetch('http://localhost:3000/reviews', {
+    fetch('https://schoolarship-management-system-serv.vercel.app/reviews', {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
