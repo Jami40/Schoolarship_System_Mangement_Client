@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useContext } from 'react';
 import { AuthContext } from '../Provider/AuthProvider';
 
@@ -6,9 +6,11 @@ export const useUserRole = () => {
   const { user } = useContext(AuthContext);
   const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true);
+  const fetchedRef = useRef(false);
 
   useEffect(() => {
-    if (user?.email) {
+    if (user?.email && !fetchedRef.current) {
+      fetchedRef.current = true;
       fetch(`http://localhost:3000/users/${user.email}`)
         .then(res => res.json())
         .then(data => {
@@ -20,11 +22,12 @@ export const useUserRole = () => {
           setUserRole('user');
           setLoading(false);
         });
-    } else {
+    } else if (!user?.email) {
       setUserRole(null);
       setLoading(false);
+      fetchedRef.current = false;
     }
-  }, [user]);
+  }, [user?.email]);
 
   return { userRole, loading };
 };
@@ -33,9 +36,11 @@ export const useAdmin = () => {
   const { user } = useContext(AuthContext);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const fetchedRef = useRef(false);
 
   useEffect(() => {
-    if (user?.email) {
+    if (user?.email && !fetchedRef.current) {
+      fetchedRef.current = true;
       fetch(`http://localhost:3000/users/admin/${user.email}`)
         .then(res => res.json())
         .then(data => {
@@ -47,11 +52,12 @@ export const useAdmin = () => {
           setIsAdmin(false);
           setLoading(false);
         });
-    } else {
+    } else if (!user?.email) {
       setIsAdmin(false);
       setLoading(false);
+      fetchedRef.current = false;
     }
-  }, [user]);
+  }, [user?.email]);
 
   return { isAdmin, loading };
 };
@@ -60,9 +66,11 @@ export const useModerator = () => {
   const { user } = useContext(AuthContext);
   const [isModerator, setIsModerator] = useState(false);
   const [loading, setLoading] = useState(true);
+  const fetchedRef = useRef(false);
 
   useEffect(() => {
-    if (user?.email) {
+    if (user?.email && !fetchedRef.current) {
+      fetchedRef.current = true;
       fetch(`http://localhost:3000/users/moderator/${user.email}`)
         .then(res => res.json())
         .then(data => {
@@ -74,11 +82,12 @@ export const useModerator = () => {
           setIsModerator(false);
           setLoading(false);
         });
-    } else {
+    } else if (!user?.email) {
       setIsModerator(false);
       setLoading(false);
+      fetchedRef.current = false;
     }
-  }, [user]);
+  }, [user?.email]);
 
   return { isModerator, loading };
 };

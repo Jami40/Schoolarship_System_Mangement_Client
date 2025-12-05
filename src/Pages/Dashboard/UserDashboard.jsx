@@ -27,7 +27,7 @@ export default function UserDashboard() {
           {/* Navigation Tabs */}
           <div className="flex gap-4 mt-6 border-b">
             <NavLink
-              to="/dashboard/my-profile"
+              to="/user-dashboard/my-profile"
               className={({ isActive }) =>
                 `px-6 py-3 font-semibold border-b-2 transition-colors ${
                   isActive
@@ -44,7 +44,7 @@ export default function UserDashboard() {
               </span>
             </NavLink>
             <NavLink
-              to="/dashboard/my-applications"
+              to="/user-dashboard/my-applications"
               className={({ isActive }) =>
                 `px-6 py-3 font-semibold border-b-2 transition-colors ${
                   isActive
@@ -61,7 +61,7 @@ export default function UserDashboard() {
               </span>
             </NavLink>
             <NavLink
-              to="/dashboard/my-reviews"
+              to="/user-dashboard/my-reviews"
               className={({ isActive }) =>
                 `px-6 py-3 font-semibold border-b-2 transition-colors ${
                   isActive

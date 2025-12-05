@@ -12,6 +12,15 @@ import UserDashboard from '../Pages/Dashboard/UserDashboard';
 import MyProfile from '../Pages/Dashboard/MyProfile';
 import MyApplication from '../Pages/Dashboard/MyApplication';
 import MyReviews from '../Pages/Dashboard/MyReviews';
+import ModeratorDashboard from '../Pages/Dashboard/ModeratorDashboard';
+import ModeratorProfile from '../Pages/Dashboard/ModeratorProfile';
+import ManageScholarships from '../Pages/Dashboard/ManageScholarships';
+import AllReviews from '../Pages/Dashboard/AllReviews';
+import AllAppliedScholarships from '../Pages/Dashboard/AllAppliedScholarships';
+import AddScholarship from '../Pages/Dashboard/AddScholarship';
+import AdminDashboard from '../Pages/Dashboard/AdminDashboard';
+import ManageUsers from '../Pages/Dashboard/ManageUsers';
+import AdminProfile from '../Pages/Dashboard/AdminProfile';
 import PrivateRoute from '../routes/PrivateRoute';
 
 export const router = createBrowserRouter([
@@ -41,11 +50,19 @@ export const router = createBrowserRouter([
               <PrivateRoute>
                 <Dashboard />
               </PrivateRoute>
+            )
+        },
+        {
+            path:'/user-dashboard',
+            element: (
+              <PrivateRoute>
+                <UserDashboard />
+              </PrivateRoute>
             ),
             children: [
               {
                 index: true,
-                element: <Navigate to="/dashboard/my-profile" replace />
+                element: <Navigate to="/user-dashboard/my-profile" replace />
               },
               {
                 path: 'my-profile',
@@ -58,6 +75,78 @@ export const router = createBrowserRouter([
               {
                 path: 'my-reviews',
                 element: <MyReviews />
+              }
+            ]
+        },
+        {
+            path:'/moderator-dashboard',
+            element: (
+              <PrivateRoute>
+                <ModeratorDashboard />
+              </PrivateRoute>
+            ),
+            children: [
+              {
+                index: true,
+                element: <Navigate to="/moderator-dashboard/my-profile" replace />
+              },
+              {
+                path: 'my-profile',
+                element: <ModeratorProfile />
+              },
+              {
+                path: 'manage-scholarships',
+                element: <ManageScholarships />
+              },
+              {
+                path: 'all-reviews',
+                element: <AllReviews />
+              },
+              {
+                path: 'all-applications',
+                element: <AllAppliedScholarships />
+              },
+              {
+                path: 'add-scholarship',
+                element: <AddScholarship />
+              }
+            ]
+        },
+        {
+            path:'/admin-dashboard',
+            element: (
+              <PrivateRoute>
+                <AdminDashboard />
+              </PrivateRoute>
+            ),
+            children: [
+              {
+                index: true,
+                element: <Navigate to="/admin-dashboard/my-profile" replace />
+              },
+              {
+                path: 'my-profile',
+                element: <AdminProfile />
+              },
+              {
+                path: 'add-scholarship',
+                element: <AddScholarship />
+              },
+              {
+                path: 'manage-scholarships',
+                element: <ManageScholarships />
+              },
+              {
+                path: 'manage-applications',
+                element: <AllAppliedScholarships />
+              },
+              {
+                path: 'manage-reviews',
+                element: <AllReviews />
+              },
+              {
+                path: 'manage-users',
+                element: <ManageUsers />
               }
             ]
         },
