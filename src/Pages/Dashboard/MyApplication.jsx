@@ -22,9 +22,11 @@ export default function MyApplication() {
 
   const fetchApplications = () => {
     if (user?.email) {
+      console.log('Fetching applications for:', user.email);
       fetch(`http://localhost:3000/applications/user/${user.email}`)
         .then(res => res.json())
         .then(data => {
+          console.log('Applications fetched:', data);
           setApplications(data);
           setLoading(false);
         })
@@ -95,9 +97,9 @@ export default function MyApplication() {
     e.preventDefault();
 
     const review = {
-      scholarship_id: selectedScholarship.scholarship_id,
-      scholarship_name: selectedScholarship.scholarship_name,
-      university_name: selectedScholarship.university_name,
+      scholarship_id: selectedScholarship.scholarshipId || selectedScholarship.scholarship_id,
+      scholarship_name: selectedScholarship.scholarshipName || selectedScholarship.scholarship_name,
+      university_name: selectedScholarship.universityName || selectedScholarship.university_name,
       university_id: selectedScholarship.university_id,
       user_name: user.displayName,
       user_email: user.email,
@@ -244,20 +246,20 @@ export default function MyApplication() {
                     <td className="px-4 py-4">
                       <div>
                         <div className="font-semibold text-gray-900">
-                          {app.university_name}
+                          {app.universityName || app.university_name}
                         </div>
                         <div className="text-sm text-gray-600">
                           {app.university_address}
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-4 text-gray-900">{app.subject_category}</td>
+                    <td className="px-4 py-4 text-gray-900">{app.subjectCategory || app.subject_category}</td>
                     <td className="px-4 py-4">
                       <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
-                        {app.applied_degree}
+                        {app.applyingDegree || app.applied_degree}
                       </span>
                     </td>
-                    <td className="px-4 py-4 text-gray-900">${app.application_fees}</td>
+                    <td className="px-4 py-4 text-gray-900">${app.applicationFee || app.application_fees}</td>
                     <td className="px-4 py-4 text-gray-900">${app.service_charge || 0}</td>
                     <td className="px-4 py-4">
                       <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(app.status)}`}>
@@ -272,7 +274,7 @@ export default function MyApplication() {
                     <td className="px-4 py-4">
                       <div className="flex flex-col gap-2">
                         <Link
-                          to={`/scholarships/${app.scholarship_id}`}
+                          to={`/scholarships/${app.scholarshipId || app.scholarship_id}`}
                           className="px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded hover:bg-blue-700 transition-colors text-center"
                         >
                           Details

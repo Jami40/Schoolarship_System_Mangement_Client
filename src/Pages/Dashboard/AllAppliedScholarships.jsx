@@ -211,23 +211,23 @@ export default function AllAppliedScholarships() {
                   <tr key={app._id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-4 py-4">
                       <div>
-                        <div className="font-semibold text-gray-900">{app.user_name}</div>
-                        <div className="text-sm text-gray-600">{app.user_email}</div>
+                        <div className="font-semibold text-gray-900">{app.userName}</div>
+                        <div className="text-sm text-gray-600">{app.userEmail}</div>
                       </div>
                     </td>
-                    <td className="px-4 py-4 text-gray-900">{app.university_name}</td>
+                    <td className="px-4 py-4 text-gray-900">{app.universityName}</td>
                     <td className="px-4 py-4">
                       <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                        {app.subject_category}
+                        {app.subjectCategory}
                       </span>
                     </td>
                     <td className="px-4 py-4">
                       <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
-                        {app.applied_degree}
+                        {app.applyingDegree}
                       </span>
                     </td>
                     <td className="px-4 py-4 text-gray-900 text-sm">
-                      {new Date(app.applied_date).toLocaleDateString()}
+                      {new Date(app.applicationDate).toLocaleDateString()}
                     </td>
                     <td className="px-4 py-4">
                       <select
@@ -280,30 +280,30 @@ export default function AllAppliedScholarships() {
           <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
             <div className="bg-linear-to-r from-purple-600 to-blue-600 p-6 text-white">
               <h3 className="text-2xl font-bold">Application Details</h3>
-              <p className="text-purple-100 mt-1">{selectedApplication.user_name}</p>
+              <p className="text-purple-100 mt-1">{selectedApplication.userName}</p>
             </div>
 
             <div className="p-6 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Applicant Name</p>
-                  <p className="font-semibold text-gray-900">{selectedApplication.user_name}</p>
+                  <p className="font-semibold text-gray-900">{selectedApplication.userName}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Email</p>
-                  <p className="font-semibold text-gray-900">{selectedApplication.user_email}</p>
+                  <p className="font-semibold text-gray-900">{selectedApplication.userEmail}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 mb-1">University</p>
-                  <p className="font-semibold text-gray-900">{selectedApplication.university_name}</p>
+                  <p className="font-semibold text-gray-900">{selectedApplication.universityName}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Applied Degree</p>
-                  <p className="font-semibold text-gray-900">{selectedApplication.applied_degree}</p>
+                  <p className="font-semibold text-gray-900">{selectedApplication.applyingDegree}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">Scholarship Category</p>
-                  <p className="font-semibold text-gray-900">{selectedApplication.subject_category}</p>
+                  <p className="text-sm text-gray-600 mb-1">Subject Category</p>
+                  <p className="font-semibold text-gray-900">{selectedApplication.subjectCategory}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Phone</p>
@@ -315,7 +315,7 @@ export default function AllAppliedScholarships() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Study Gap</p>
-                  <p className="font-semibold text-gray-900">{selectedApplication.studyGap} years</p>
+                  <p className="font-semibold text-gray-900">{selectedApplication.studyGap}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 mb-1">SSC Result</p>
@@ -327,7 +327,7 @@ export default function AllAppliedScholarships() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Application Fees</p>
-                  <p className="font-semibold text-gray-900">${selectedApplication.application_fees}</p>
+                  <p className="font-semibold text-gray-900">${selectedApplication.applicationFee}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Status</p>
@@ -337,9 +337,46 @@ export default function AllAppliedScholarships() {
                 </div>
                 <div className="md:col-span-2">
                   <p className="text-sm text-gray-600 mb-1">Address</p>
-                  <p className="font-semibold text-gray-900">{selectedApplication.address}</p>
+                  <p className="font-semibold text-gray-900">
+                    {selectedApplication.address?.village}, {selectedApplication.address?.district}, {selectedApplication.address?.country}
+                  </p>
                 </div>
               </div>
+              
+              {/* Payment Information */}
+              {selectedApplication.paymentInfo && (
+                <div className="border-t pt-6">
+                  <h4 className="text-lg font-bold text-gray-800 mb-4">💳 Payment Information</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-blue-50 p-4 rounded-lg">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Card Number</p>
+                      <p className="font-semibold text-gray-900">{selectedApplication.paymentInfo.cardNumber}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Expiry Date</p>
+                      <p className="font-semibold text-gray-900">{selectedApplication.paymentInfo.expiryDate}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">CVC</p>
+                      <p className="font-semibold text-gray-900">***</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">ZIP Code</p>
+                      <p className="font-semibold text-gray-900">{selectedApplication.paymentInfo.zipCode}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Amount Paid</p>
+                      <p className="font-semibold text-green-600 text-lg">${selectedApplication.paymentInfo.amount}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Payment Status</p>
+                      <span className="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                        {selectedApplication.paymentStatus}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <button
                 onClick={() => setShowDetailsModal(false)}

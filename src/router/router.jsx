@@ -7,6 +7,7 @@ import Login from '../SignUp_Login/Login';
 import NotFound from '../Pages/NotFound/NotFound';
 import Schoolarship from '../Pages/SchoolarshipPage/Schoolarship';
 import ScholarshipDetails from '../Pages/ScholarshipDetails/ScholarshipDetails';
+import ApplyScholarship from '../Pages/ApplyScholarship/ApplyScholarship';
 import Dashboard from '../Pages/Dashboard/Dashboard';
 import UserDashboard from '../Pages/Dashboard/UserDashboard';
 import MyProfile from '../Pages/Dashboard/MyProfile';
@@ -41,6 +42,14 @@ export const router = createBrowserRouter([
             element: (
               <PrivateRoute>
                 <ScholarshipDetails />
+              </PrivateRoute>
+            )
+        },
+        {
+            path:'/apply-scholarship/:id',
+            element: (
+              <PrivateRoute>
+                <ApplyScholarship />
               </PrivateRoute>
             )
         },

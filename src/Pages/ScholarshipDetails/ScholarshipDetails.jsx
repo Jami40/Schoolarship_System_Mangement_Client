@@ -117,7 +117,8 @@ export default function ScholarshipDetails() {
   };
 
   const handleApply = () => {
-    setShowApplicationModal(true);
+    // Navigate to the apply scholarship page
+    navigate(`/apply-scholarship/${id}`);
   };
 
   const handleSubmitApplication = async (e) => {
