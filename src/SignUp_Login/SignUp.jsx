@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../Provider/AuthProvider';
+import { toast } from 'react-toastify';
 
 export default function SignUp() {
   const { createUser, signInWithGoogle, updateUserProfile } = useContext(AuthContext);
@@ -19,9 +20,24 @@ export default function SignUp() {
     const password = form.password.value;
     const photoURL = form.photoURL.value;
 
-    // Validation
+    // Password Validation
     if (password.length < 6) {
-      setError('Password should be at least 6 characters');
+      setError('Password must be at least 6 characters long');
+      toast.error('Password must be at least 6 characters long');
+      return;
+    }
+
+    // Check for uppercase letter
+    if (!/[A-Z]/.test(password)) {
+      setError('Password must contain at least one uppercase letter');
+      toast.error('Password must contain at least one uppercase letter');
+      return;
+    }
+
+    // Check for special character
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      setError('Password must contain at least one special character (!@#$%^&*(),.?":{}|<>)');
+      toast.error('Password must contain at least one special character');
       return;
     }
 
@@ -31,18 +47,51 @@ export default function SignUp() {
         // Update profile
         updateUserProfile(name, photoURL)
           .then(() => {
-            setSuccess('Account created successfully!');
-            form.reset();
-            setTimeout(() => {
-              navigate('/');
-            }, 1500);
+            // Save user to MongoDB
+            const userInfo = {
+              name: name,
+              email: email,
+              photoURL: photoURL,
+              role: 'user',
+              createdAt: new Date().toISOString()
+            };
+            
+            fetch('http://localhost:3000/users', {
+              method: 'POST',
+              headers: {
+                'content-type': 'application/json'
+              },
+              body: JSON.stringify(userInfo)
+            })
+              .then(res => res.json())
+              .then(data => {
+                if (data.insertedId || data.message === 'User already exists') {
+                  setSuccess('Account created successfully!');
+                  toast.success('🎉 Account created successfully! Welcome!');
+                  form.reset();
+                  setTimeout(() => {
+                    navigate('/');
+                  }, 1500);
+                }
+              })
+              .catch(err => {
+                console.error('Error saving user to database:', err);
+                toast.warning('Account created but database sync failed');
+                setSuccess('Account created successfully!');
+                form.reset();
+                setTimeout(() => {
+                  navigate('/');
+                }, 1500);
+              });
           })
           .catch((err) => {
             setError(err.message);
+            toast.error('Failed to update profile: ' + err.message);
           });
       })
       .catch((error) => {
         setError(error.message);
+        toast.error('Signup failed: ' + error.message);
       });
   };
 
@@ -50,10 +99,39 @@ export default function SignUp() {
     setError('');
     signInWithGoogle()
       .then((result) => {
-        setSuccess('Signed in with Google successfully!');
-        setTimeout(() => {
-          navigate('/');
-        }, 1500);
+        // Save Google user to MongoDB
+        const user = result.user;
+        const userInfo = {
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          role: 'user',
+          createdAt: new Date().toISOString()
+        };
+        
+        fetch('http://localhost:3000/users', {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify(userInfo)
+        })
+          .then(res => res.json())
+          .then(data => {
+            setSuccess('Signed in with Google successfully!');
+            toast.success('🎉 Signed in with Google successfully!');
+            setTimeout(() => {
+              navigate('/');
+            }, 1500);
+          })
+          .catch(err => {
+            console.error('Error saving user to database:', err);
+            toast.warning('Signed in but database sync failed');
+            setSuccess('Signed in with Google successfully!');
+            setTimeout(() => {
+              navigate('/');
+            }, 1500);
+          });
       })
       .catch((error) => {
         setError(error.message);
@@ -179,8 +257,14 @@ export default function SignUp() {
                 type="password"
                 required
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="At least 6 characters"
+                placeholder="Enter your password"
               />
+              <p className="mt-2 text-xs text-gray-600">
+                Password must contain:
+                <br />• At least 6 characters
+                <br />• One uppercase letter (A-Z)
+                <br />• One special character (!@#$%^&*...)
+              </p>
             </div>
           </div>
 

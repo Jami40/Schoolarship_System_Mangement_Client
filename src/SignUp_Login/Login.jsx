@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../Provider/AuthProvider';
+import { toast } from 'react-toastify';
 
 export default function Login() {
   const { signIn, signInWithGoogle } = useContext(AuthContext);
@@ -24,6 +25,7 @@ export default function Login() {
     signIn(email, password)
       .then((result) => {
         setSuccess('Logged in successfully!');
+        toast.success('🎉 Logged in successfully!');
         form.reset();
         setTimeout(() => {
           navigate(from, { replace: true });
@@ -31,6 +33,7 @@ export default function Login() {
       })
       .catch((error) => {
         setError('Invalid email or password');
+        toast.error('Invalid email or password');
       });
   };
 
@@ -39,12 +42,14 @@ export default function Login() {
     signInWithGoogle()
       .then((result) => {
         setSuccess('Signed in with Google successfully!');
+        toast.success('🎉 Signed in with Google successfully!');
         setTimeout(() => {
           navigate(from, { replace: true });
         }, 1500);
       })
       .catch((error) => {
         setError(error.message);
+        toast.error('Google sign-in failed: ' + error.message);
       });
   };
 

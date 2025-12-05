@@ -24,6 +24,11 @@ export default function Navbar() {
     { name: 'Contact', path: '/contact' },
   ];
 
+  // Add Dashboard to nav items if user is logged in
+  const allNavItems = user 
+    ? [{ name: 'Dashboard', path: '/dashboard' }, ...navItems]
+    : navItems;
+
   return (
     <nav className="bg-blue-600 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,7 +45,7 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
-            {navItems.map((item) => (
+            {allNavItems.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
@@ -152,7 +157,7 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {navItems.map((item) => (
+            {allNavItems.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
